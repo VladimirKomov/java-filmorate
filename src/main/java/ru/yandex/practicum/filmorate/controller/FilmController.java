@@ -6,9 +6,7 @@ import ru.yandex.practicum.filmorate.exception.AlreadyExistException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,12 +33,20 @@ public class FilmController {
         log.debug("Получен запрос PUT /films.");
         log.info("Сохраняется {}", film.toString());
         if (films.containsValue(film)) {
-            throw new AlreadyExistException("Фильм уже добавлен");
+            Optional<Integer> key = Optional.empty();
+            for (Map.Entry<Integer, Film> entry : films.entrySet())
+                if (films.equals(entry.getValue())) {
+                    Integer integerFilmEntryKey = entry.getKey();
+                    key = Optional.of(integerFilmEntryKey);
+                    break;
+                }
+            films.replace(key.get(), film);
+        } else {
+            if (film.getId() == 0) {
+                film.setId(++generateId);
+            }
+            films.put(film.getId(), film);
         }
-        if (film.getId() == 0) {
-            film.setId(++generateId);
-        }
-        films.put(film.getId(), film);
 
         return film;
     }
@@ -51,10 +57,16 @@ public class FilmController {
         log.debug("Получен запрос GET /films.");
         log.info("Фильмов {}", films.size());
 
-        return films.entrySet()
-                .stream()
-                .map(e -> e.getValue())
-                .collect(Collectors.toList());
+        return new ArrayList<>(films.values());
+    }
+
+    //в ТЗ удаления не было, будет отсебячина
+    @DeleteMapping
+    public void deleteAll() {
+        log.debug("Получен запрос DELETE /films.");
+        log.info("Удалено Фильмов {}", films.size());
+
+        films.clear();
     }
 
 }

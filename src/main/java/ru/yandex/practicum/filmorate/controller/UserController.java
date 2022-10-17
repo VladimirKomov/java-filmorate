@@ -3,14 +3,10 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.AlreadyExistException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -28,6 +24,7 @@ public class UserController {
         user.setId(++generateId);
         validateName(user);
         users.put(user.getId(), user);
+        //users.put(user, user.getId());
 
         return user;
     }
@@ -38,13 +35,20 @@ public class UserController {
         log.debug("Получен запрос PUT /users.");
         log.info("Сохраняется {}", user.toString());
         validateName(user);
+        //переделал обновление позователей
         if (users.containsValue(user)) {
-            throw new AlreadyExistException("Пользователь c таким E-mail существует");
+            Optional<Integer> key = users.entrySet()
+                    .stream()
+                    .filter(entry -> user.equals(entry.getValue()))
+                    .map(Map.Entry::getKey)
+                    .findFirst();
+            users.replace(key.get(), user);
+        } else {
+            if (user.getId() == 0) {
+                user.setId(++generateId);
+            }
+            users.put(user.getId(), user);
         }
-        if (user.getId() == 0) {
-            user.setId(++generateId);
-        }
-        users.put(user.getId(), user);
 
         return user;
     }
@@ -55,10 +59,16 @@ public class UserController {
         log.debug("Получен запрос GET /users.");
         log.info("Пользователей {}", users.size());
 
-        return users.entrySet()
-                .stream()
-                .map(e -> e.getValue())
-                .collect(Collectors.toList());
+        return new ArrayList<>(users.values());
+    }
+
+    //в ТЗ удаления не было, будет отсебячина
+    @DeleteMapping
+    public void deleteAll() {
+        log.debug("Получен запрос DELETE /users.");
+        log.info("Удалено Пользователей {}", users.size());
+
+        users.clear();
     }
 
     private void validateName(User user) {
