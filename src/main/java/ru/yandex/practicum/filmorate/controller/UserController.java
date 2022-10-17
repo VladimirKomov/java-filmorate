@@ -35,20 +35,16 @@ public class UserController {
         log.debug("Получен запрос PUT /users.");
         log.info("Сохраняется {}", user.toString());
         validateName(user);
-        //переделал обновление позователей
+      
+        //при реалзиции когда пользователь с там же e-mail обновляется и возращатеся 200
+        //тесты на github выдают ошибку и просят статус 500
         if (users.containsValue(user)) {
-            Optional<Integer> key = users.entrySet()
-                    .stream()
-                    .filter(entry -> user.equals(entry.getValue()))
-                    .map(Map.Entry::getKey)
-                    .findFirst();
-            users.replace(key.get(), user);
-        } else {
-            if (user.getId() == 0) {
-                user.setId(++generateId);
-            }
-            users.put(user.getId(), user);
+            throw new ArithmeticException("Пользователь с таким e-mail существует.");
         }
+        if (user.getId() == 0) {
+            user.setId(++generateId);
+        }
+        users.put(user.getId(), user);
 
         return user;
     }
