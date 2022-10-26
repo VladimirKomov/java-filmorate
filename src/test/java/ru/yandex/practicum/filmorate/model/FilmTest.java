@@ -33,6 +33,7 @@ class FilmTest {
     //продолжительность фильма должна быть положительной
 
     private static Stream<Arguments> generate() {
+        //Film goodFilm = new Film(1,"Film", "Description")
 
         return Stream.of(
                 //good film
@@ -99,7 +100,7 @@ class FilmTest {
 
     @ParameterizedTest
     @MethodSource("generate")
-    void filTests(Film film, int exp) {
+    void filmTests(Film film, int exp) {
 
         Set<ConstraintViolation<Film>> validates = validator.validate(film);
         assertEquals(exp, validates.size(), "Не верное количество фильмов");

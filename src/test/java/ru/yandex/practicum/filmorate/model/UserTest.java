@@ -35,10 +35,13 @@ class UserTest {
 
     private static Stream<Arguments> generate() {
 
+        //User user = new User(1,);
+
         return Stream.of(
                 //good user
+
                 Arguments.of(User.builder()
-                        .id(1)
+                        //.id(1)
                         .email("mail@yandex.ru")
                         .login("login")
                         .name("name")
@@ -46,7 +49,7 @@ class UserTest {
                         .build(), 0),
                 //email null
                 Arguments.of(User.builder()
-                        .id(1)
+                        //.id(1)
                         .email(null)
                         .login("login")
                         .name("name")
@@ -54,7 +57,7 @@ class UserTest {
                         .build(), 1),
                 //email blink
                 Arguments.of(User.builder()
-                        .id(1)
+                        //.id(1)
                         .email("")
                         .login("login")
                         .name("name")
@@ -62,7 +65,7 @@ class UserTest {
                         .build(), 1),
                 //email empty
                 Arguments.of(User.builder()
-                        .id(1)
+                        //.id(1)
                         .email(" ")
                         .login("login")
                         .name("name")
@@ -70,7 +73,7 @@ class UserTest {
                         .build(), 2),
                 //email without commercial at
                 Arguments.of(User.builder()
-                        .id(1)
+                        //.id(1)
                         .email("mail.yandex.ru")
                         .login("login")
                         .name("name")
@@ -78,7 +81,7 @@ class UserTest {
                         .build(), 1),
                 //login blink
                 Arguments.of(User.builder()
-                        .id(1)
+                        //.id(1)
                         .email("mail@yandex.ru")
                         .login("")
                         .name("name")
@@ -86,7 +89,7 @@ class UserTest {
                         .build(), 1),
                 //login empty
                 Arguments.of(User.builder()
-                        .id(1)
+                        //.id(1)
                         .email("mail@yandex.ru")
                         .login(" ")
                         .name("name")
@@ -94,7 +97,7 @@ class UserTest {
                         .build(), 1),
                 //birthday after now
                 Arguments.of(User.builder()
-                        .id(1)
+                        //.id(1)
                         .email("mail@yandex.ru")
                         .login("login")
                         .name("name")
