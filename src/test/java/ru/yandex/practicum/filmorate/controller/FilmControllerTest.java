@@ -86,7 +86,7 @@ class FilmControllerTest {
         );
 
         //ставим лайк
-        mockMvc.perform(MockMvcRequestBuilders.put(PATH + "/2/like/1"))
+        mockMvc.perform(MockMvcRequestBuilders.put(PATH + "/2/like/3"))
                 .andExpect(MockMvcResultMatchers.status().isOk()
                 );
 
