@@ -24,7 +24,7 @@ public class FilmController {
 
     //добавление фильма
     @PostMapping
-    public Film film(@Valid @RequestBody Film film) {
+    public Film post(@Valid @RequestBody Film film) {
         log.info("Сохраняется {}", film.toString());
 
         return filmService.create(film);
@@ -62,7 +62,7 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
+    public void deleteById(@PathVariable long id) {
         log.info("DELETE Фильм id={}", id);
 
         filmService.delete(id);

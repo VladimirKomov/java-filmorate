@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserService extends AbstractService<User> {
 
-    //Storage<User> storage;
-
     @Autowired
     public UserService(Storage<User> storage) {
         this.storage = storage;
@@ -56,8 +54,7 @@ public class UserService extends AbstractService<User> {
     }
 
     public List<User> getFriends(long id) {
-        return getUsersById(storage.get(id).getFriendsId().stream()
-                .collect(Collectors.toList()));
+        return getUsersById(new ArrayList<>(storage.get(id).getFriendsId()));
     }
 
     public List<User> getCommonFriends(long id, long otherId) {
@@ -65,7 +62,7 @@ public class UserService extends AbstractService<User> {
         Set<Long> otherFriendsId = storage.get(otherId).getFriendsId();
 
         List<Long> commonFriendsId = friendsId.stream()
-                .filter(i -> otherFriendsId.contains(i))
+                .filter(otherFriendsId :: contains)
                 .collect(Collectors.toList());
         return getUsersById(commonFriendsId);
     }
