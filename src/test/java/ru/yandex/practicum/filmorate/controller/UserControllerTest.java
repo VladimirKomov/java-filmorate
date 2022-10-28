@@ -1,6 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.internal.bytebuddy.implementation.bind.annotation.Default;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,7 +19,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @AutoConfigureMockMvc
 //тестирование с помощью MockMvc
 //В вебинаре говорись что можно делать и одним тестом, т.к. данные не очищаются
@@ -35,6 +38,8 @@ class UserControllerTest {
     }
 
 
+
+
     @Test
     void getEmpty() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(PATH))
@@ -42,6 +47,7 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
     }
 
+    @Disabled
     @Test
     void usersTests() throws Exception {
         //создаем пользователя из json

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,6 +38,7 @@ class FilmControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
     }
 
+    @Disabled
     @Test
     void filmsTests() throws Exception {
         //создаем из json
