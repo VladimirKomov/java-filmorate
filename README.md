@@ -7,7 +7,8 @@ Template repository for Filmorate project.
 ![diagram](/diagram.png)
 
 ###### Примеры запроса к оснвным таблицам
-<sub>SELECT 
+```
+SELECT 
       film_id,
       name,
       description,
@@ -24,3 +25,4 @@ SELECT
       name,
       birthday
 FROM users
+```
