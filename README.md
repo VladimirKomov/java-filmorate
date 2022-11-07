@@ -1,10 +1,10 @@
 # java-filmorate
 Template repository for Filmorate project.
 
-Диаграмма по спринту 11
+###### Диаграмма по спринту 11
 ![diagram](/diagram.png)
 
-Примеры запроса к оснвным таблицам
+###### Примеры запроса к оснвным таблицам
 SELECT 
       film_id,
       name,
