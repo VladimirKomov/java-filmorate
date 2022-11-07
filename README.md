@@ -16,7 +16,7 @@ SELECT
       duration,
       rate,
       MPA
-FROM films</sub>
+FROM films
 ```
 ```
 SELECT 
