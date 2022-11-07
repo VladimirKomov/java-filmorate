@@ -17,7 +17,7 @@ SELECT
       rate,
       MPA
 FROM films</sub>
-
+```
 SELECT 
       user_id,
       email,
