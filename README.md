@@ -2,10 +2,12 @@
 Template repository for Filmorate project.
 
 ## Диаграмма по спринту 11
+
+
 ![diagram](/diagram.png)
 
 ###### Примеры запроса к оснвным таблицам
-SELECT 
+<sub>SELECT 
       film_id,
       name,
       description,
@@ -13,7 +15,7 @@ SELECT
       duration,
       rate,
       MPA
-FROM films
+FROM films</sub>
 
 SELECT 
       user_id,
