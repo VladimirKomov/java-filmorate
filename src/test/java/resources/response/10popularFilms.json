@@ -1,0 +1,16 @@
+[
+  {
+    "id":2,
+    "name":"Other labore nulla",
+    "description":"Other Duis in consequat esse",
+    "releaseDate":"1979-04-17",
+    "duration":90
+  },
+  {
+    "id":1,
+    "name":"Film Updated",
+    "description":"New film update decription",
+    "releaseDate":"1989-04-17",
+    "duration":190
+  }
+]

@@ -1,72 +1,92 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.AlreadyExistException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private int generateId = 0;
-    private final Map<Integer, Film> films = new HashMap<>();
+
+    FilmService filmService;
+
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     //добавление фильма
     @PostMapping
-    public Film film(@Valid @RequestBody Film film) {
-        log.debug("Получен запрос POST /films.");
+    public Film post(@Valid @RequestBody Film film) {
         log.info("Сохраняется {}", film.toString());
-        film.setId(++generateId);
-        films.put(film.getId(), film);
 
-        return film;
+        return filmService.create(film);
     }
 
     //обновление фильма
     @PutMapping
     public Film put(@Valid @RequestBody Film film) {
-        log.debug("Получен запрос PUT /films.");
         log.info("Сохраняется {}", film.toString());
-        if (films.containsValue(film)) {
-            Optional<Integer> key = Optional.empty();
-            for (Map.Entry<Integer, Film> entry : films.entrySet())
-                if (films.equals(entry.getValue())) {
-                    Integer integerFilmEntryKey = entry.getKey();
-                    key = Optional.of(integerFilmEntryKey);
-                    break;
-                }
-            films.replace(key.get(), film);
-        } else {
-            if (film.getId() == 0) {
-                film.setId(++generateId);
-            }
-            films.put(film.getId(), film);
-        }
 
-        return film;
+        return filmService.update(film);
     }
 
     //получение всех фильмов
     @GetMapping
     public List<Film> getAll() {
-        log.debug("Получен запрос GET /films.");
+        final List<Film> films = filmService.getAll();
         log.info("Фильмов {}", films.size());
 
-        return new ArrayList<>(films.values());
+        return films;
     }
 
-    //в ТЗ удаления не было, будет отсебячина
+    @GetMapping("/{id}")
+    public Film get(@PathVariable long id) {
+        log.info("GET Фильм id={}", id);
+
+        return filmService.get(id);
+    }
+
     @DeleteMapping
     public void deleteAll() {
-        log.debug("Получен запрос DELETE /films.");
-        log.info("Удалено Фильмов {}", films.size());
+        log.info("Удалено Фильмов {}", filmService.getSize());
 
-        films.clear();
+        filmService.deleteAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable long id) {
+        log.info("DELETE Фильм id={}", id);
+
+        filmService.delete(id);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public void addLike(@PathVariable long id, @PathVariable long userId) {
+        log.info("Добавляетсвя лайк к фильму id={} пользователем userId={}", id, userId);
+
+        filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public void removeLike(@PathVariable long id, @PathVariable long userId) {
+        log.info("Удаляется лайк к фильму id={} пользователем userId={}", id, userId);
+
+        filmService.removeLike(id, userId);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> getPopular(@RequestParam(defaultValue = "10") int count) {
+        log.info("Получаем популярные фильмы ={}", count);
+
+        return filmService.getPopular(count);
     }
 
 }
