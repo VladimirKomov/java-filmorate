@@ -44,8 +44,4 @@ public abstract class AbstractService<T extends BaseModel> {
         return storage.getAll();
     }
 
-    public int getSize() {
-        return storage.getSize();
-    }
-
 }

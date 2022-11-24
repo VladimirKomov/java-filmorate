@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class FilmControllerTest {
@@ -38,7 +39,6 @@ class FilmControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
     }
 
-    @Disabled
     @Test
     void filmsTests() throws Exception {
         //создаем из json
@@ -88,7 +88,7 @@ class FilmControllerTest {
         );
 
         //ставим лайк
-        mockMvc.perform(MockMvcRequestBuilders.put(PATH + "/2/like/3"))
+        mockMvc.perform(MockMvcRequestBuilders.put(PATH + "/1/like/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk()
                 );
 
@@ -96,7 +96,7 @@ class FilmControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(PATH + "/popular"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(getFile(
-                        "src/test/java/resources/response/10popularFilms.json"))
+                        "src/test/java/resources/response/1popularFilm.json"))
                 );
 
         //получаем первый по популярности

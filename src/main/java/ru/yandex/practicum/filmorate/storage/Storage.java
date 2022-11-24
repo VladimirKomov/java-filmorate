@@ -18,6 +18,4 @@ public interface Storage<T extends BaseModel> {
 
     List<T> getAll();
 
-    int getSize();
-
 }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-abstract class AbstractStorage<T extends BaseModel> implements Storage<T> {
+public abstract class AbstractStorage<T extends BaseModel> implements Storage<T> {
     private final Map<Long, T> storage = new HashMap<>();
 
     @Override
@@ -56,8 +56,4 @@ abstract class AbstractStorage<T extends BaseModel> implements Storage<T> {
         return new ArrayList<>(storage.values());
     }
 
-    @Override
-    public int getSize() {
-        return storage.size();
-    }
 }

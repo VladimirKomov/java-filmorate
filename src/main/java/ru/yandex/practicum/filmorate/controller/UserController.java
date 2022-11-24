@@ -40,21 +40,21 @@ public class UserController {
     //получение списка всех пользователей
     @GetMapping
     public List<User> getAll() {
-        log.info("Пользователей {}", userService.getSize());
+        log.info("Полвчение всех Пользователей");
 
         return userService.getAll();
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable long id) {
-        log.info("Пользователей {}", userService.getSize());
+        log.info("Удаляется Пользователь id={}", id);
 
         return userService.get(id);
     }
 
     @DeleteMapping
     public void deleteAll() {
-        log.info("Удаляются Пользователи {}", userService.getSize());
+        log.info("Удаляются все Пользователи");
 
         userService.deleteAll();
     }
@@ -86,6 +86,5 @@ public class UserController {
 
         return userService.getCommonFriends(id, otherId);
     }
-
 
 }
