@@ -27,6 +27,7 @@ public class DbUserStorage implements UserStorage {
 
     @Override
     public void create(User user) {
+
         String sqlQuery = "insert into users (email, login, name, birthday) " +
                 "values (?, ?, ?, ?)";
 
@@ -53,7 +54,7 @@ public class DbUserStorage implements UserStorage {
     public User get(long id) {
         String sqlQuery = "select * from users where id = ?";
         final List<User> users = jdbcTemplate.query(sqlQuery, DbUserStorage::makeUser, id);
-        if (users.size() !=1) {
+        if (users.size() != 1) {
             throw new DataNotFoundException("Пользователь id=" + id);
         }
         return users.get(0);

@@ -47,7 +47,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable long id) {
-        log.info("Удаляется Пользователь id={}", id);
+        log.info("Получение Пользователя id={}", id);
 
         return userService.get(id);
     }

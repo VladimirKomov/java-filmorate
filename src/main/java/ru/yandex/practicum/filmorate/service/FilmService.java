@@ -67,8 +67,6 @@ public class FilmService extends AbstractService<Film> {
     }
 
     public List<Film> getPopular(int size) {
-        //return likeStorage.getPopular(size);
-        //тут хуета
         List<Film> films = likeStorage.getPopular(size);
         genreStorage.load(films);
         return films;
@@ -80,10 +78,6 @@ public class FilmService extends AbstractService<Film> {
         return films;
     }
 
-    public Film save(Film film) {
-        storage.create(film);
-        return film;
-    }
 
     public Film update(Film film) {
         final  Film filmForUpdate = storage.get(film.getId());

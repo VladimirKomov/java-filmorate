@@ -3,14 +3,12 @@
 drop all objects;
 
 --очистка таблиц
-TRUNCATE TABLE FRIENDS;
-TRUNCATE TABLE LIKES;
-TRUNCATE TABLE FILMS_GENRES;
-truncate table LIKES;
---TRUNCATE TABLE USERS;
---TRUNCATE TABLE FILMS;
-delete FROM USERS;
-DELETE FROM FILMS;
+delete from FRIENDS;
+delete from LIKES;
+delete from FILMS_GENRES;
+delete from LIKES;
+delete from USERS;
+delete from FILMS;
 
 ---- проверка запросов
 -- получение фильмов фильмов
