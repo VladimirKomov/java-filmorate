@@ -12,9 +12,6 @@ import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 
 import javax.servlet.ServletException;
 import javax.validation.ValidationException;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.SQLNonTransientException;
 
 @Slf4j
 @RestControllerAdvice
