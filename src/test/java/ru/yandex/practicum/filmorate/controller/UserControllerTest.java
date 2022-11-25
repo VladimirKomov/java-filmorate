@@ -23,7 +23,6 @@ import java.nio.file.Files;
 @AutoConfigureMockMvc
 //тестирование с помощью MockMvc
 //В вебинаре говорись что можно делать и одним тестом, т.к. данные не очищаются
-//или я просто не знаю как сделать еще пробовал через WireMock не разбрался, буду позже пробовать
 
 class UserControllerTest {
 
@@ -47,7 +46,6 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
     }
 
-    @Disabled
     @Test
     void usersTests() throws Exception {
         //создаем пользователя из json

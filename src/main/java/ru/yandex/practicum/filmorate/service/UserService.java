@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.Storage;
 
 import javax.validation.ValidationException;
@@ -15,9 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserService extends AbstractService<User> {
 
+    final FriendStorage friendStorage;
+
     @Autowired
-    public UserService(Storage<User> storage) {
+    public UserService(Storage<User> storage, FriendStorage friendStorage) {
         this.storage = storage;
+        this.friendStorage = friendStorage;
     }
 
 
@@ -41,37 +45,26 @@ public class UserService extends AbstractService<User> {
     public void addFriend(long userId, long friendId) {
         final User user = storage.get(userId);
         final User friend = storage.get(friendId);
-        user.getFriendsId().add(friendId);
-        friend.getFriendsId().add(userId);
+        friendStorage.addFriend(user.getId(), friend.getId());
     }
 
     public void removeFriend(long userId, long friendId) {
         final User user = storage.get(userId);
         final User friend = storage.get(friendId);
         storage.get(friendId);
-        user.getFriendsId().remove(friendId);
-        friend.getFriendsId().remove(userId);
+        friendStorage.removeFriend(user.getId(), friend.getId());
     }
 
     public List<User> getFriends(long id) {
-        return getUsersById(new ArrayList<>(storage.get(id).getFriendsId()));
+        final User user = storage.get(id);
+        return friendStorage.getFriends(user.getId());
     }
 
     public List<User> getCommonFriends(long id, long otherId) {
-        Set<Long> friendsId = storage.get(id).getFriendsId();
-        Set<Long> otherFriendsId = storage.get(otherId).getFriendsId();
+        final User user = storage.get(id);
+        final User other = storage.get(otherId);
 
-        List<Long> commonFriendsId = friendsId.stream()
-                .filter(otherFriendsId :: contains)
-                .collect(Collectors.toList());
-        return getUsersById(commonFriendsId);
+        return friendStorage.getCommonFriends(user.getId(), other.getId());
     }
 
-    private List<User> getUsersById(List<Long> usersId) {
-        List<User> users = new ArrayList<>();
-        for (long id : usersId) {
-            users.add(storage.get(id));
-        }
-        return users;
-    }
 }

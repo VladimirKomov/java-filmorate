@@ -41,28 +41,28 @@ class FilmTest {
                         .name("Film")
                         .description("Description")
                         .releaseDate(LocalDate.of(2000, 01, 01))
-                        .duration(120)
+                        .duration(120L)
                         .build(), 0),
                 //name null
                 Arguments.of(Film.builder()
                         .name(null)
                         .description("Description")
                         .releaseDate(LocalDate.of(2000, 01, 01))
-                        .duration(120)
+                        .duration(120L)
                         .build(), 1),
                 //name blink
                 Arguments.of(Film.builder()
                         .name("")
                         .description("Description")
                         .releaseDate(LocalDate.of(2000, 01, 01))
-                        .duration(120)
+                        .duration(120L)
                         .build(), 1),
                 //name blink
                 Arguments.of(Film.builder()
                         .name(" ")
                         .description("Description")
                         .releaseDate(LocalDate.of(2000, 01, 01))
-                        .duration(120)
+                        .duration(120L)
                         .build(), 1),
                 //Description size 201
                 Arguments.of(Film.builder()
@@ -73,28 +73,28 @@ class FilmTest {
                                 + "01234567890123456789012345678901234567890123456789"
                                 + "0")
                         .releaseDate(LocalDate.of(2000, 01, 01))
-                        .duration(120)
+                        .duration(120L)
                         .build(), 1),
                 //releaseDate 27.12.1885
                 Arguments.of(Film.builder()
                         .name("Film")
                         .description("description")
                         .releaseDate(LocalDate.of(1885, 12, 27))
-                        .duration(120)
+                        .duration(120L)
                         .build(), 1),
                 //duration 0
                 Arguments.of(Film.builder()
                         .name("Film")
                         .description("description")
                         .releaseDate(LocalDate.of(2000, 01, 01))
-                        .duration(0)
+                        .duration(0L)
                         .build(), 1),
                 //duration negative
                 Arguments.of(Film.builder()
                         .name("Film")
                         .description("description")
                         .releaseDate(LocalDate.of(2000, 01, 01))
-                        .duration(-1)
+                        .duration(-1L)
                         .build(), 1));
     }
 

@@ -1,7 +1,9 @@
 {
-  "id": 1,
-  "name": "labore nulla",
-  "description": "Duis in consequat esse",
-  "releaseDate": "1979-04-17",
-  "duration": 100
+  "id":1,
+  "name":"labore nulla",
+  "description":"Duis in consequat esse",
+  "releaseDate":"1979-04-17",
+  "duration":100,
+  "mpa":{"id":1,"name":"G"},
+  "genres":[]
 }
