@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.LikeStorage;
+import ru.yandex.practicum.filmorate.storage.mapper.FilmMapper;
 
 import java.util.List;
 
@@ -11,9 +12,11 @@ import java.util.List;
 public class DbLikeStorage implements LikeStorage {
 
     private final JdbcTemplate jdbcTemplate;
+    public final FilmMapper filmMapper = new FilmMapper();
 
     public DbLikeStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+
     }
 
     @Override
@@ -43,7 +46,7 @@ public class DbLikeStorage implements LikeStorage {
                 "MPA where FILMS.MPA_ID = MPA.ID " +
                 "order by FILMS.RATE desc " +
                 "limit ?";
-        return jdbcTemplate.query(sqlQuery, DbFilmStorage::makeFilm, count);
+        return jdbcTemplate.query(sqlQuery, filmMapper, count);
     }
 
 }

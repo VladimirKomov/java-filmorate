@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.indatabase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,20 +8,22 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.mapper.FilmMapper;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Primary
 @Component
 public class DbFilmStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
+    private final FilmMapper filmMapper = new FilmMapper();
 
 
     public DbFilmStorage(JdbcTemplate jdbcTemplate) {
@@ -47,7 +48,7 @@ public class DbFilmStorage implements FilmStorage {
             return statement;
         }, keyHolder);
         film.setId(keyHolder.getKey().longValue());
-        
+
         saveGenres(film);
 
     }
@@ -57,15 +58,20 @@ public class DbFilmStorage implements FilmStorage {
         String sqlQueryDelete = "delete from films_genres where film_id = ?";
         jdbcTemplate.update(sqlQueryDelete, filmId);
 
-        final Set<Long> idFilmGenres = new HashSet<>();
-        film.getGenres().forEach(g -> idFilmGenres.add(g.getId()));
+        List<Long> genresList = film.getGenres().stream()
+                .map(Genre::getId)
+                .distinct()
+                .collect(Collectors.toList());
 
-        if (idFilmGenres.isEmpty()) {
+        if (genresList.isEmpty()) {
             return;
         }
 
-        final ArrayList<Long> genresList = new ArrayList<>(idFilmGenres);
         String sqlQueryInsert = "insert into films_genres (film_id, genre_id) values (?,?)";
+
+        //переделать на batchUpdate
+        //genresList.forEach(e -> jdbcTemplate.update(sqlQueryInsert, filmId, e));
+
         jdbcTemplate.batchUpdate(sqlQueryInsert,
                 new BatchPreparedStatementSetter() {
                     @Override
@@ -73,6 +79,7 @@ public class DbFilmStorage implements FilmStorage {
                         ps.setLong(1, filmId);
                         ps.setLong(2, genresList.get(i));
                     }
+
                     @Override
                     public int getBatchSize() {
                         return genresList.size();
@@ -96,8 +103,8 @@ public class DbFilmStorage implements FilmStorage {
         String sqlQuery = "select * from FILMS LEFT JOIN " +
                 "MPA where FILMS.MPA_ID = MPA.ID AND FILMS.ID = ?";
 
-        final List<Film> films = jdbcTemplate.query(sqlQuery, DbFilmStorage::makeFilm, id);
-        if (films.size() !=1) {
+        final List<Film> films = jdbcTemplate.query(sqlQuery, filmMapper, id);
+        if (films.size() != 1) {
             throw new DataNotFoundException("Фильм id=" + id);
         }
         return films.get(0);
@@ -118,23 +125,8 @@ public class DbFilmStorage implements FilmStorage {
     @Override
     public List<Film> getAll() {
         String sqlQuery = "select * from FILMS LEFT JOIN " +
-                            "MPA where FILMS.MPA_ID = MPA.ID";
-        return jdbcTemplate.query(sqlQuery, DbFilmStorage::makeFilm);
-    }
-
-    static Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-        Film film = new Film();
-        film.setId(rs.getLong("films.id"));
-        film.setName(rs.getString("films.name"));
-        film.setDescription(rs.getString("description"));
-        film.setReleaseDate(rs.getDate("release_date").toLocalDate());
-        film.setDuration(rs.getLong("duration"));
-        film.setRate(rs.getLong("rate"));
-        Mpa mpa = new Mpa();
-        mpa.setId(rs.getLong("mpa.id"));
-        mpa.setName(rs.getString("mpa.name"));
-        film.setMpa(mpa);
-        return film;
+                "MPA where FILMS.MPA_ID = MPA.ID";
+        return jdbcTemplate.query(sqlQuery, filmMapper);
     }
 
 }
