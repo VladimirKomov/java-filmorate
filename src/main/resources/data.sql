@@ -1,85 +1,95 @@
 --очищаем перед стартом
-drop all objects;
+delete from FILMS;
+alter table FILMS alter column ID restart with 1;
+delete from USERS;
+alter table USERS alter column ID restart with 1;
+delete from FILMS_GENRES;
+delete from FRIENDS;
+delete from LIKES;
 
--- создаем таблицы после очистки
-create table if not exists USERS
-(
-    id int not null primary key auto_increment,
-    email varchar(255) not null,
-    login varchar(255) not null,
-    name varchar(255) not null,
-    birthday date,
-    UNIQUE (email),
-    UNIQUE (login)
-);
 
-create table if not exists MPA
-(
-    id int not null primary key auto_increment,
-    name varchar(255)
-);
 
-create table if not exists GENRES
-(
-    id int not null primary key auto_increment,
-    name varchar(255)
-);
-
-create table if not exists FILMS
-(
-    id int not null primary key auto_increment,
-    name varchar(255),
-    description varchar(255),
-    release_date date,
-    rate int,
-    duration int,
-    mpa_id int references MPA (id)
-);
-
-create table if not exists GENRES
-(
-    id int not null primary key auto_increment,
-    name varchar(255)
-);
-
-create table if not exists FILMS_GENRES
-(
-    film_id int references FILMS (id) on DELETE cascade,
-    genre_id int references GENRES(id) on DELETE cascade,
-    PRIMARY KEY (film_id, genre_id)
-);
-
-create table if not exists FRIENDS
-(
-    user_id int not null references USERS(id) on DELETE cascade,
-    friend_id int not null references USERS(id) on DELETE cascade,
-    primary key (user_id, friend_id)
-);
-
-create table if not exists LIKES
-(
-    user_id int references USERS (id) on DELETE cascade,
-    film_id int references FILMS (id) on DELETE cascade,
-    PRIMARY KEY (user_id, film_id)
-);
+-- drop all objects;
+--
+-- -- создаем таблицы после очистки
+-- create table if not exists USERS
+-- (
+--     id int not null primary key auto_increment,
+--     email varchar(255) not null,
+--     login varchar(255) not null,
+--     name varchar(255) not null,
+--     birthday date,
+--     UNIQUE (email),
+--     UNIQUE (login)
+-- );
+--
+-- create table if not exists MPA
+-- (
+--     id int not null primary key auto_increment,
+--     name varchar(255)
+-- );
+--
+-- create table if not exists GENRES
+-- (
+--     id int not null primary key auto_increment,
+--     name varchar(255)
+-- );
+--
+-- create table if not exists FILMS
+-- (
+--     id int not null primary key auto_increment,
+--     name varchar(255),
+--     description varchar(255),
+--     release_date date,
+--     rate int,
+--     duration int,
+--     mpa_id int references MPA (id)
+-- );
+--
+-- create table if not exists GENRES
+-- (
+--     id int not null primary key auto_increment,
+--     name varchar(255)
+-- );
+--
+-- create table if not exists FILMS_GENRES
+-- (
+--     film_id int references FILMS (id) on DELETE cascade,
+--     genre_id int references GENRES(id) on DELETE cascade,
+--     PRIMARY KEY (film_id, genre_id)
+-- );
+--
+-- create table if not exists FRIENDS
+-- (
+--     user_id int not null references USERS(id) on DELETE cascade,
+--     friend_id int not null references USERS(id) on DELETE cascade,
+--     primary key (user_id, friend_id)
+-- );
+--
+-- create table if not exists LIKES
+-- (
+--     user_id int references USERS (id) on DELETE cascade,
+--     film_id int references FILMS (id) on DELETE cascade,
+--     PRIMARY KEY (user_id, film_id)
+-- );
 
 --первоначальное заполнение
-merge into MPA (ID, NAME)
-    values
-        (1, 'G'),
-        (2, 'PG'),
-        (3, 'PG-13'),
-        (4, 'R'),
-        (5, 'NC-17');
-
-merge into GENRES (id, name)
-    values
-        (1, 'Комедия'),
-        (2, 'Драма'),
-        (3, 'Мультфильм'),
-        (4, 'Триллер'),
-        (5, 'Документальный'),
-        (6, 'Боевик');
+-- merge into MPA (ID, NAME)
+--     values
+--         (1, 'G'),
+--         (2, 'PG'),
+--         (3, 'PG-13'),
+--         (4, 'R'),
+--         (5, 'NC-17');
+--
+-- merge into GENRES (id, name)
+--     values
+--         (1, 'Комедия'),
+--         (2, 'Драма'),
+--         (3, 'Мультфильм'),
+--         (4, 'Триллер'),
+--         (5, 'Документальный'),
+--         (6, 'Боевик');
 
 -- Для тестирвоания, потом удалю
 
